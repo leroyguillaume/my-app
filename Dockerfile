@@ -1,9 +1,15 @@
-FROM node
+FROM node AS build
 
 WORKDIR /app
 
-COPY . .
+COPY package*.json .
 
 RUN npm ci
 
-ENTRYPOINT ["npm", "start"]
+COPY . .
+
+RUN npm run build
+
+FROM nginx:alpine
+
+COPY --from=build /app/build /usr/share/nginx/html

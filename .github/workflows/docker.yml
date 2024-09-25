@@ -1,0 +1,40 @@
+name: docker
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+    - main
+    paths-ignore:
+    - .gitignore
+    - "*.md"
+  pull_request:
+    paths-ignore:
+    - .gitignore
+    - "*.md"
+  workflow_dispatch:
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        platforms: linux/arm64,linux/amd64
+        tags: my-app
+        cache-from: type=gha
+        cache-to: type=gha,mode=max

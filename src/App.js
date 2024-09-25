@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          My App for BShare
+          My App for BShare with love
         </a>
       </header>
     </div>
